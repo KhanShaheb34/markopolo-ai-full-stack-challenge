@@ -1,0 +1,122 @@
+{
+  "source": "review_sites",
+  "lastSync": "Never",
+  "connected": false,
+  "overallRating": 4.3,
+  "totalReviews": 2847,
+  "ratingHistogram": {
+    "5": 1421,
+    "4": 856,
+    "3": 398,
+    "2": 142,
+    "1": 30
+  },
+  "recentReviews": [
+    {
+      "id": "rev_001",
+      "rating": 5,
+      "title": "Amazing quality and fast shipping!",
+      "text": "I ordered the Air Max Running Shoes and they arrived within 2 days. The quality is exceptional and they fit perfectly. Definitely buying again!",
+      "author": "Jennifer K.",
+      "date": "2024-01-14T09:30:00Z",
+      "productId": "prod_sneakers_001",
+      "verified": true,
+      "topics": ["quality", "shipping", "fit"]
+    },
+    {
+      "id": "rev_002",
+      "rating": 4,
+      "title": "Good jacket, slightly expensive",
+      "text": "The Winter Jacket Pro is really warm and well-made. Material feels premium. Only downside is the price point, but I guess you get what you pay for.",
+      "author": "Michael R.",
+      "date": "2024-01-12T15:45:22Z",
+      "productId": "prod_jacket_002",
+      "verified": true,
+      "topics": ["quality", "price", "material"]
+    },
+    {
+      "id": "rev_003",
+      "rating": 5,
+      "title": "Best customer service ever!",
+      "text": "Had an issue with my order and customer service resolved it immediately. They went above and beyond to make sure I was satisfied. This is why I keep coming back!",
+      "author": "Sarah M.",
+      "date": "2024-01-10T11:20:18Z",
+      "verified": true,
+      "topics": ["customer-service", "support"]
+    },
+    {
+      "id": "rev_004",
+      "rating": 3,
+      "title": "Product is okay, delivery was slow",
+      "text": "The backpack is decent quality for the price. However, it took almost a week to arrive which was longer than expected. Product description was accurate though.",
+      "author": "David L.",
+      "date": "2024-01-08T14:15:33Z",
+      "productId": "prod_backpack_004",
+      "verified": false,
+      "topics": ["delivery", "quality", "description"]
+    },
+    {
+      "id": "rev_005",
+      "rating": 5,
+      "title": "Love the smart watch!",
+      "text": "The Smart Fitness Watch exceeded my expectations. Battery life is great, tracking is accurate, and the app integration works flawlessly. Highly recommended!",
+      "author": "Emma W.",
+      "date": "2024-01-06T10:42:55Z",
+      "productId": "prod_watch_003",
+      "verified": true,
+      "topics": ["battery", "tracking", "app", "quality"]
+    },
+    {
+      "id": "rev_006",
+      "rating": 2,
+      "title": "Not as described, returning",
+      "text": "The jacket color looked different from the website photos. Material also felt cheaper than expected. Easy return process though.",
+      "author": "Robert T.",
+      "date": "2024-01-04T16:28:41Z",
+      "productId": "prod_jacket_002",
+      "verified": true,
+      "topics": ["color", "material", "description", "returns"]
+    },
+    {
+      "id": "rev_007",
+      "rating": 4,
+      "title": "Great value for money",
+      "text": "Solid product at a reasonable price. Nothing fancy but does exactly what it's supposed to do. Would recommend for budget-conscious buyers.",
+      "author": "Lisa A.",
+      "date": "2024-01-02T13:55:12Z",
+      "productId": "prod_backpack_004",
+      "verified": true,
+      "topics": ["value", "price", "budget"]
+    },
+    {
+      "id": "rev_008",
+      "rating": 5,
+      "title": "Perfect fit and style",
+      "text": "These running shoes are exactly what I was looking for. Comfortable, stylish, and great for both running and casual wear. The sizing chart was spot on!",
+      "author": "Chris H.",
+      "date": "2023-12-30T08:33:27Z",
+      "productId": "prod_sneakers_001",
+      "verified": true,
+      "topics": ["fit", "style", "comfort", "sizing"]
+    }
+  ],
+  "topicAnalysis": {
+    "quality": { "count": 156, "avgRating": 4.5, "sentiment": "positive" },
+    "shipping": { "count": 134, "avgRating": 4.2, "sentiment": "positive" },
+    "price": { "count": 98, "avgRating": 3.8, "sentiment": "mixed" },
+    "customer-service": {
+      "count": 87,
+      "avgRating": 4.7,
+      "sentiment": "positive"
+    },
+    "fit": { "count": 76, "avgRating": 4.3, "sentiment": "positive" },
+    "material": { "count": 65, "avgRating": 4.1, "sentiment": "positive" },
+    "delivery": { "count": 52, "avgRating": 3.9, "sentiment": "mixed" }
+  },
+  "platforms": [
+    { "name": "Google Reviews", "reviews": 1234, "avgRating": 4.4 },
+    { "name": "Trustpilot", "reviews": 890, "avgRating": 4.2 },
+    { "name": "Facebook Reviews", "reviews": 456, "avgRating": 4.5 },
+    { "name": "Yelp", "reviews": 267, "avgRating": 4.1 }
+  ]
+}

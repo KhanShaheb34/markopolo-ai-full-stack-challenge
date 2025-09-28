@@ -1,0 +1,131 @@
+{
+  "source": "shopify",
+  "lastSync": "5 minutes ago",
+  "totalCustomers": 892,
+  "totalOrders": 1456,
+  "customers": [
+    {
+      "id": "cust_001",
+      "email": "john.doe@example.com",
+      "firstName": "John",
+      "lastName": "Doe",
+      "createdAt": "2023-06-15T10:30:00Z",
+      "lastPurchaseDate": "2024-01-10T14:22:33Z",
+      "totalOrders": 8,
+      "totalSpent": 847.92,
+      "averageOrderValue": 105.99,
+      "lifetimeValue": 1200.0,
+      "tags": ["high-value", "repeat-customer"],
+      "topCategories": ["Electronics", "Sports"]
+    },
+    {
+      "id": "cust_002",
+      "email": "sarah.wilson@example.com",
+      "firstName": "Sarah",
+      "lastName": "Wilson",
+      "createdAt": "2023-11-22T16:45:12Z",
+      "lastPurchaseDate": "2023-12-28T11:18:45Z",
+      "totalOrders": 3,
+      "totalSpent": 234.97,
+      "averageOrderValue": 78.32,
+      "lifetimeValue": 350.0,
+      "tags": ["new-customer"],
+      "topCategories": ["Fashion", "Beauty"]
+    },
+    {
+      "id": "cust_003",
+      "email": "mike.johnson@example.com",
+      "firstName": "Mike",
+      "lastName": "Johnson",
+      "createdAt": "2023-03-08T09:15:22Z",
+      "lastPurchaseDate": "2024-01-14T16:42:18Z",
+      "totalOrders": 12,
+      "totalSpent": 1245.67,
+      "averageOrderValue": 103.81,
+      "lifetimeValue": 1800.0,
+      "tags": ["vip", "frequent-buyer"],
+      "topCategories": ["Home", "Electronics"]
+    },
+    {
+      "id": "cust_004",
+      "email": "emma.davis@example.com",
+      "firstName": "Emma",
+      "lastName": "Davis",
+      "createdAt": "2023-09-30T13:20:55Z",
+      "lastPurchaseDate": "2023-11-15T10:35:42Z",
+      "totalOrders": 2,
+      "totalSpent": 167.48,
+      "averageOrderValue": 83.74,
+      "lifetimeValue": 250.0,
+      "tags": ["cart-abandoner"],
+      "topCategories": ["Books", "Health"]
+    },
+    {
+      "id": "cust_005",
+      "email": "alex.brown@example.com",
+      "firstName": "Alex",
+      "lastName": "Brown",
+      "createdAt": "2023-07-12T11:08:31Z",
+      "lastPurchaseDate": "2024-01-12T15:27:19Z",
+      "totalOrders": 6,
+      "totalSpent": 492.33,
+      "averageOrderValue": 82.06,
+      "lifetimeValue": 700.0,
+      "tags": ["loyal-customer"],
+      "topCategories": ["Sports", "Outdoors"]
+    },
+    {
+      "id": "cust_006",
+      "email": "lisa.anderson@example.com",
+      "firstName": "Lisa",
+      "lastName": "Anderson",
+      "createdAt": "2023-05-18T14:55:47Z",
+      "lastPurchaseDate": "2023-08-22T09:41:15Z",
+      "totalOrders": 1,
+      "totalSpent": 89.99,
+      "averageOrderValue": 89.99,
+      "lifetimeValue": 120.0,
+      "tags": ["one-time-buyer", "needs-reactivation"],
+      "topCategories": ["Fashion"]
+    }
+  ],
+  "recentOrders": [
+    {
+      "orderId": "ord_789xyz",
+      "customerId": "cust_001",
+      "orderDate": "2024-01-10T14:22:33Z",
+      "totalValue": 129.99,
+      "status": "fulfilled",
+      "items": [
+        {
+          "productId": "prod_sneakers_001",
+          "name": "Air Max Running Shoes",
+          "quantity": 1,
+          "price": 129.99
+        }
+      ]
+    },
+    {
+      "orderId": "ord_456abc",
+      "customerId": "cust_003",
+      "orderDate": "2024-01-14T16:42:18Z",
+      "totalValue": 199.98,
+      "status": "fulfilled",
+      "items": [
+        {
+          "productId": "prod_jacket_002",
+          "name": "Winter Jacket Pro",
+          "quantity": 2,
+          "price": 89.99
+        }
+      ]
+    }
+  ],
+  "segments": {
+    "highValue": 45,
+    "atRisk": 128,
+    "newCustomers": 67,
+    "repeatBuyers": 234,
+    "cartAbandoners": 89
+  }
+}

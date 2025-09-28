@@ -1,0 +1,154 @@
+{
+  "source": "twitter_x",
+  "lastSync": "1 hour ago",
+  "connected": true,
+  "accountInfo": {
+    "handle": "@AwesomeStore",
+    "displayName": "AwesomeStore",
+    "followers": 8420,
+    "following": 1250,
+    "totalTweets": 3456,
+    "verified": false
+  },
+  "tweets": [
+    {
+      "id": "tweet_001",
+      "text": "🔥 Flash Sale Alert! 24 hours only - 30% off all winter gear! Perfect timing before the cold snap hits. Shop now: [link] #WinterSale #FlashSale",
+      "createdAt": "2024-01-15T09:30:00Z",
+      "likes": 145,
+      "retweets": 34,
+      "replies": 12,
+      "views": 2840,
+      "engagement": 191,
+      "hashtags": ["WinterSale", "FlashSale"],
+      "mentions": []
+    },
+    {
+      "id": "tweet_002",
+      "text": "Customer love 💕 'Best online shopping experience I've ever had!' - Sarah M. What's your AwesomeStore experience? Share with us! ⬇️",
+      "createdAt": "2024-01-14T14:15:22Z",
+      "likes": 98,
+      "retweets": 18,
+      "replies": 23,
+      "views": 1950,
+      "engagement": 139,
+      "hashtags": [],
+      "mentions": []
+    },
+    {
+      "id": "tweet_003",
+      "text": "Behind the scenes: Our team working hard to get your orders packed and shipped same day! 📦✨ Thank you for your patience during our busy season.",
+      "createdAt": "2024-01-13T11:45:33Z",
+      "likes": 76,
+      "retweets": 12,
+      "replies": 8,
+      "views": 1680,
+      "engagement": 96,
+      "hashtags": [],
+      "mentions": []
+    },
+    {
+      "id": "tweet_004",
+      "text": "New week, new products! 🆕 Check out our latest arrivals in fitness and outdoor gear. Perfect for your 2024 health goals! 💪 #NewArrivals #Fitness2024",
+      "createdAt": "2024-01-12T08:20:15Z",
+      "likes": 124,
+      "retweets": 28,
+      "replies": 15,
+      "views": 2340,
+      "engagement": 167,
+      "hashtags": ["NewArrivals", "Fitness2024"],
+      "mentions": []
+    },
+    {
+      "id": "tweet_005",
+      "text": "Thread 🧵 5 styling tips for your winter wardrobe that won't break the bank: 1/ Layer basics with statement pieces...",
+      "createdAt": "2024-01-11T16:30:45Z",
+      "likes": 89,
+      "retweets": 22,
+      "replies": 19,
+      "views": 1820,
+      "engagement": 130,
+      "hashtags": [],
+      "mentions": [],
+      "isThread": true
+    },
+    {
+      "id": "tweet_006",
+      "text": "Restock alert! 🚨 The sold-out Air Max Running Shoes are back in all sizes. Limited quantity - first come, first served! [link]",
+      "createdAt": "2024-01-10T13:25:18Z",
+      "likes": 203,
+      "retweets": 45,
+      "replies": 28,
+      "views": 3420,
+      "engagement": 276,
+      "hashtags": [],
+      "mentions": []
+    },
+    {
+      "id": "tweet_007",
+      "text": "Eco-friendly packaging update 🌱 We're proud to announce all our shipments now use 100% recyclable materials. Small steps, big impact! #Sustainability",
+      "createdAt": "2024-01-09T10:15:42Z",
+      "likes": 156,
+      "retweets": 38,
+      "replies": 14,
+      "views": 2760,
+      "engagement": 208,
+      "hashtags": ["Sustainability"],
+      "mentions": []
+    },
+    {
+      "id": "tweet_008",
+      "text": "Weekend vibes! 😎 What are you planning to do this Saturday? Whatever it is, make sure you're dressed for it! Check our weekend casual collection 👕",
+      "createdAt": "2024-01-08T07:45:30Z",
+      "likes": 67,
+      "retweets": 11,
+      "replies": 9,
+      "views": 1450,
+      "engagement": 87,
+      "hashtags": [],
+      "mentions": []
+    },
+    {
+      "id": "tweet_009",
+      "text": "Thank you for 8K followers! 🎉 As a celebration, we're giving away a $100 gift card. To enter: Follow, RT, and tag 2 friends. Winner announced Friday! 🎁",
+      "createdAt": "2024-01-07T15:20:25Z",
+      "likes": 312,
+      "retweets": 89,
+      "replies": 156,
+      "views": 5240,
+      "engagement": 557,
+      "hashtags": [],
+      "mentions": [],
+      "isGiveaway": true
+    },
+    {
+      "id": "tweet_010",
+      "text": "Pro tip: Always check the size chart before ordering! 📏 We want to make sure you get the perfect fit every time. Questions? Our DMs are always open! 💬",
+      "createdAt": "2024-01-06T12:35:50Z",
+      "likes": 45,
+      "retweets": 8,
+      "replies": 6,
+      "views": 980,
+      "engagement": 59,
+      "hashtags": [],
+      "mentions": []
+    }
+  ],
+  "analytics": {
+    "avgEngagementRate": 6.8,
+    "avgLikesPerTweet": 131,
+    "avgRetweetsPerTweet": 30,
+    "avgRepliesPerTweet": 29,
+    "totalImpressions": 23480,
+    "bestPerformingTweet": "tweet_009",
+    "topHashtags": [
+      "WinterSale",
+      "FlashSale",
+      "NewArrivals",
+      "Fitness2024",
+      "Sustainability"
+    ],
+    "peakHours": ["09:00-11:00", "14:00-16:00", "19:00-21:00"],
+    "growthRate": "+2.3%"
+  }
+}

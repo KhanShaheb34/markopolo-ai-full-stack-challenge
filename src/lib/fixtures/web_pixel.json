@@ -1,0 +1,125 @@
+{
+  "source": "website_pixel",
+  "lastSync": "2 hours ago",
+  "totalEvents": 1247,
+  "events": [
+    {
+      "id": "evt_001",
+      "event": "view_product",
+      "timestamp": "2024-01-15T14:30:25Z",
+      "productId": "prod_sneakers_001",
+      "productName": "Air Max Running Shoes",
+      "value": 129.99,
+      "currency": "USD",
+      "userId": "user_12345",
+      "sessionId": "sess_abc123"
+    },
+    {
+      "id": "evt_002",
+      "event": "add_to_cart",
+      "timestamp": "2024-01-15T14:32:10Z",
+      "productId": "prod_sneakers_001",
+      "productName": "Air Max Running Shoes",
+      "value": 129.99,
+      "currency": "USD",
+      "userId": "user_12345",
+      "sessionId": "sess_abc123",
+      "quantity": 1
+    },
+    {
+      "id": "evt_003",
+      "event": "purchase",
+      "timestamp": "2024-01-15T14:35:42Z",
+      "productId": "prod_sneakers_001",
+      "productName": "Air Max Running Shoes",
+      "value": 129.99,
+      "currency": "USD",
+      "userId": "user_12345",
+      "sessionId": "sess_abc123",
+      "orderId": "ord_789xyz"
+    },
+    {
+      "id": "evt_004",
+      "event": "view_product",
+      "timestamp": "2024-01-15T15:22:18Z",
+      "productId": "prod_jacket_002",
+      "productName": "Winter Jacket Pro",
+      "value": 89.99,
+      "currency": "USD",
+      "userId": "user_67890",
+      "sessionId": "sess_def456"
+    },
+    {
+      "id": "evt_005",
+      "event": "add_to_cart",
+      "timestamp": "2024-01-15T15:23:35Z",
+      "productId": "prod_jacket_002",
+      "productName": "Winter Jacket Pro",
+      "value": 89.99,
+      "currency": "USD",
+      "userId": "user_67890",
+      "sessionId": "sess_def456",
+      "quantity": 1
+    },
+    {
+      "id": "evt_006",
+      "event": "view_product",
+      "timestamp": "2024-01-15T16:15:03Z",
+      "productId": "prod_watch_003",
+      "productName": "Smart Fitness Watch",
+      "value": 199.99,
+      "currency": "USD",
+      "userId": "user_11111",
+      "sessionId": "sess_ghi789"
+    },
+    {
+      "id": "evt_007",
+      "event": "purchase",
+      "timestamp": "2024-01-15T16:45:12Z",
+      "productId": "prod_jacket_002",
+      "productName": "Winter Jacket Pro",
+      "value": 89.99,
+      "currency": "USD",
+      "userId": "user_67890",
+      "sessionId": "sess_def456",
+      "orderId": "ord_456abc"
+    },
+    {
+      "id": "evt_008",
+      "event": "view_product",
+      "timestamp": "2024-01-15T17:08:29Z",
+      "productId": "prod_backpack_004",
+      "productName": "Travel Backpack Deluxe",
+      "value": 79.99,
+      "currency": "USD",
+      "userId": "user_22222",
+      "sessionId": "sess_jkl012"
+    }
+  ],
+  "topProducts": [
+    {
+      "id": "prod_sneakers_001",
+      "name": "Air Max Running Shoes",
+      "views": 245,
+      "purchases": 18
+    },
+    {
+      "id": "prod_jacket_002",
+      "name": "Winter Jacket Pro",
+      "views": 189,
+      "purchases": 15
+    },
+    {
+      "id": "prod_watch_003",
+      "name": "Smart Fitness Watch",
+      "views": 156,
+      "purchases": 12
+    },
+    {
+      "id": "prod_backpack_004",
+      "name": "Travel Backpack Deluxe",
+      "views": 134,
+      "purchases": 9
+    }
+  ]
+}

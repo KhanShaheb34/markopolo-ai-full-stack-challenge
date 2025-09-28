@@ -1,0 +1,95 @@
+{
+  "source": "facebook_page",
+  "lastSync": "Never",
+  "connected": false,
+  "pageInfo": {
+    "name": "AwesomeStore Official",
+    "followers": 12540,
+    "likes": 11890,
+    "categoryName": "Retail Company"
+  },
+  "posts": [
+    {
+      "id": "post_001",
+      "message": "🔥 New Winter Collection is here! Stay warm and stylish with our latest jackets and coats. Free shipping on orders over $75! ❄️✨",
+      "createdTime": "2024-01-12T10:30:00Z",
+      "type": "photo",
+      "likes": 234,
+      "comments": 45,
+      "shares": 12,
+      "reach": 3420,
+      "engagement": 291
+    },
+    {
+      "id": "post_002",
+      "message": "Weekend Sale Alert! 🛍️ Up to 40% off on selected items. Don't miss out on these amazing deals! Shop now ⬇️",
+      "createdTime": "2024-01-10T09:15:30Z",
+      "type": "link",
+      "likes": 189,
+      "comments": 28,
+      "shares": 18,
+      "reach": 2890,
+      "engagement": 235
+    },
+    {
+      "id": "post_003",
+      "message": "Customer Spotlight! 🌟 Thank you Sarah M. for sharing this amazing photo wearing our Air Max Running Shoes! Tag us in your photos for a chance to be featured! 📸",
+      "createdTime": "2024-01-08T14:45:22Z",
+      "type": "photo",
+      "likes": 156,
+      "comments": 32,
+      "shares": 8,
+      "reach": 2340,
+      "engagement": 196
+    },
+    {
+      "id": "post_004",
+      "message": "Pro tip Tuesday! 💡 How to style your winter jacket for different occasions. Swipe to see our styling guide! ➡️",
+      "createdTime": "2024-01-05T11:20:15Z",
+      "type": "carousel",
+      "likes": 98,
+      "comments": 15,
+      "shares": 6,
+      "reach": 1780,
+      "engagement": 119
+    },
+    {
+      "id": "post_005",
+      "message": "Behind the scenes at our warehouse! 📦 Your orders are being packed with love and care. Thank you for your patience during our busy season! ❤️",
+      "createdTime": "2024-01-03T16:30:45Z",
+      "type": "video",
+      "likes": 178,
+      "comments": 22,
+      "shares": 14,
+      "reach": 2650,
+      "engagement": 214,
+      "videoViews": 1240
+    },
+    {
+      "id": "post_006",
+      "message": "New Year, New You! 🎉 Start 2024 with our fitness collection. From running shoes to workout gear, we've got you covered! 💪",
+      "createdTime": "2024-01-01T08:00:00Z",
+      "type": "photo",
+      "likes": 267,
+      "comments": 38,
+      "shares": 21,
+      "reach": 4120,
+      "engagement": 326
+    }
+  ],
+  "topCommenters": [
+    { "name": "Emma Johnson", "comments": 12, "avgEngagement": "high" },
+    { "name": "Mike Davis", "comments": 8, "avgEngagement": "medium" },
+    { "name": "Sarah Wilson", "comments": 6, "avgEngagement": "high" },
+    { "name": "Alex Brown", "comments": 5, "avgEngagement": "low" }
+  ],
+  "engagementTrends": {
+    "avgLikesPerPost": 185,
+    "avgCommentsPerPost": 30,
+    "avgSharesPerPost": 13,
+    "avgReach": 2868,
+    "totalEngagement": 1381,
+    "bestPostingTimes": ["10:00-12:00", "14:00-16:00"],
+    "topHashtags": ["#WinterCollection", "#Sale", "#Fashion", "#NewYear"]
+  }
+}
