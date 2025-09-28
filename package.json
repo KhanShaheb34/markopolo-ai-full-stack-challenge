@@ -6,8 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "biome check",
-    "format": "biome format --write"
+    "lint": "npx ultracite check",
+    "format": "npx ultracite fix"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
