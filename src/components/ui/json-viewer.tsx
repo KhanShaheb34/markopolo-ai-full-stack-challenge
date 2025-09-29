@@ -2,10 +2,8 @@
 
 import { ChevronDown, ChevronRight, Copy, Download } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import type { CampaignPlan } from "@/lib/schema/plan";
-
-// Constants
-const COPY_SUCCESS_TIMEOUT = 2000;
 
 type JsonViewerProps = {
   data: CampaignPlan | null;
@@ -21,7 +19,6 @@ export const JsonViewer = ({
   className = "",
 }: JsonViewerProps) => {
   const [collapsed, setCollapsed] = useState<CollapsedState>({});
-  const [copySuccess, setCopySuccess] = useState(false);
 
   if (!data) {
     return (
@@ -45,25 +42,30 @@ export const JsonViewer = ({
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
-      setCopySuccess(true);
-      setTimeout(() => setCopySuccess(false), COPY_SUCCESS_TIMEOUT);
+      toast.success("Campaign plan copied to clipboard!");
     } catch {
-      // Silently handle copy failures
+      toast.error("Failed to copy to clipboard");
     }
   };
 
   const handleDownload = () => {
-    const jsonString = JSON.stringify(data, null, 2);
-    const blob = new Blob([jsonString], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
+    try {
+      const jsonString = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonString], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `campaign-plan-${data.campaignId}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `campaign-plan-${data.campaignId}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      toast.success("Campaign plan downloaded successfully!");
+    } catch {
+      toast.error("Failed to download campaign plan");
+    }
   };
 
   return (
@@ -86,7 +88,7 @@ export const JsonViewer = ({
               type="button"
             >
               <Copy className="h-3 w-3" />
-              {copySuccess ? "Copied!" : "Copy"}
+              Copy
             </button>
 
             <button

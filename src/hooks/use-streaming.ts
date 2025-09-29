@@ -1,11 +1,14 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import { toast } from "sonner";
 import type { CampaignPlan } from "@/lib/schema/plan";
 
 // Constants
 const SSE_DATA_PREFIX_LENGTH = 6; // "data: ".length
 const TOTAL_STAGES = 5;
+const HTTP_STATUS_TOO_MANY_REQUESTS = 429;
+const HTTP_STATUS_SERVER_ERROR = 500;
 
 type StreamingStage =
   | "profiling"
@@ -64,6 +67,8 @@ const processStreamData = (
         ...(prev.currentStage ? [prev.currentStage] : []),
       ],
     }));
+    toast.dismiss("planning-start");
+    toast.success("Campaign plan generated successfully!");
     return true;
   }
 
@@ -74,6 +79,8 @@ const processStreamData = (
       isStreaming: false,
       currentStage: null,
     }));
+    toast.dismiss("planning-start");
+    toast.error(`Planning error: ${data.error.message}`);
     return true;
   }
 
@@ -84,6 +91,8 @@ const handleFetchError = (
   error: unknown,
   updateState: React.Dispatch<React.SetStateAction<StreamingState>>
 ) => {
+  toast.dismiss("planning-start");
+
   if (error instanceof Error && error.name === "AbortError") {
     updateState((prev) => ({
       ...prev,
@@ -91,13 +100,74 @@ const handleFetchError = (
       currentStage: null,
       error: "Stream cancelled",
     }));
+    toast.info("Campaign planning cancelled");
   } else {
+    const errorMessage =
+      error instanceof Error ? error.message : "Streaming failed";
     updateState((prev) => ({
       ...prev,
       isStreaming: false,
       currentStage: null,
-      error: error instanceof Error ? error.message : "Streaming failed",
+      error: errorMessage,
     }));
+    toast.error(`Planning failed: ${errorMessage}`);
+  }
+};
+
+// Validation helper to reduce complexity
+const validateStreamingInputs = (
+  prompt: string,
+  selectedSources: string[],
+  selectedChannels: string[]
+): boolean => {
+  if (!prompt.trim()) {
+    toast.error("Please enter a campaign description");
+    return false;
+  }
+
+  if (selectedSources.length === 0) {
+    toast.error("Please select at least one data source");
+    return false;
+  }
+
+  if (selectedChannels.length === 0) {
+    toast.error("Please select at least one marketing channel");
+    return false;
+  }
+
+  return true;
+};
+
+// Network helper to reduce complexity
+const createStreamRequest = (
+  prompt: string,
+  selectedSources: string[],
+  selectedChannels: string[],
+  timezone: string
+) => {
+  const params = new URLSearchParams({
+    prompt,
+    sources: selectedSources.join(","),
+    channels: selectedChannels.join(","),
+    timezone,
+  });
+  return `/api/stream?${params}`;
+};
+
+const validateResponse = (response: Response) => {
+  if (!response.ok) {
+    const errorMsg = `Server error ${response.status}: ${response.statusText}`;
+    if (response.status === HTTP_STATUS_TOO_MANY_REQUESTS) {
+      throw new Error("Rate limit exceeded. Please try again later.");
+    }
+    if (response.status >= HTTP_STATUS_SERVER_ERROR) {
+      throw new Error("Server is temporarily unavailable. Please try again.");
+    }
+    throw new Error(errorMsg);
+  }
+
+  if (!response.body) {
+    throw new Error("No response body received from server");
   }
 };
 
@@ -185,30 +255,37 @@ export const useStreaming = () => {
       selectedChannels: string[],
       timezone = "Asia/Dhaka"
     ) => {
+      // Validation checks
+      if (!validateStreamingInputs(prompt, selectedSources, selectedChannels)) {
+        return;
+      }
+
       resetState();
       setState((prev) => ({ ...prev, isStreaming: true, error: null }));
       abortControllerRef.current = new AbortController();
 
-      try {
-        const params = new URLSearchParams({
-          prompt,
-          sources: selectedSources.join(","),
-          channels: selectedChannels.join(","),
-          timezone,
-        });
+      toast.loading("Starting campaign planning...", { id: "planning-start" });
 
-        const response = await fetch(`/api/stream?${params}`, {
+      // Check network connectivity
+      if (!navigator.onLine) {
+        toast.dismiss("planning-start");
+        toast.error("No internet connection. Please check your network.");
+        setState((prev) => ({ ...prev, isStreaming: false }));
+        return;
+      }
+
+      try {
+        const streamUrl = createStreamRequest(
+          prompt,
+          selectedSources,
+          selectedChannels,
+          timezone
+        );
+        const response = await fetch(streamUrl, {
           signal: abortControllerRef.current.signal,
         });
 
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-
-        if (!response.body) {
-          throw new Error("No response body received");
-        }
-
+        validateResponse(response);
         await processSseStream(response, setState);
       } catch (error) {
         handleFetchError(error, setState);

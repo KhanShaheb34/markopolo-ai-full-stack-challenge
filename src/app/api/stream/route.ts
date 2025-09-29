@@ -164,7 +164,8 @@ export async function POST(request: NextRequest) {
             const sseData = `data: ${data}\n\n`;
             controller.enqueue(encoder.encode(sseData));
 
-            await new Promise((resolve) => setTimeout(resolve, 300));
+            // Add delay between chunks for better UX (longer to see streaming)
+            await new Promise((resolve) => setTimeout(resolve, 1500));
           }
 
           controller.close();
