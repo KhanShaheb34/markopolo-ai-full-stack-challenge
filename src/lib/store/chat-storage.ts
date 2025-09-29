@@ -73,9 +73,10 @@ export const createChatSession = (
 };
 
 // Format relative time for chat display
-export const formatRelativeTime = (date: Date): string => {
+export const formatRelativeTime = (date: Date | string): string => {
   const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
+  const dateObj = typeof date === "string" ? new Date(date) : date;
+  const diffMs = now.getTime() - dateObj.getTime();
   const diffMins = Math.floor(diffMs / MILLISECONDS_PER_MINUTE);
   const diffHours = Math.floor(diffMs / MILLISECONDS_PER_HOUR);
   const diffDays = Math.floor(diffMs / MILLISECONDS_PER_DAY);
@@ -95,5 +96,5 @@ export const formatRelativeTime = (date: Date): string => {
   if (diffDays < DAYS_PER_MONTH) {
     return `${Math.floor(diffDays / DAYS_PER_WEEK)}w ago`;
   }
-  return date.toLocaleDateString();
+  return dateObj.toLocaleDateString();
 };

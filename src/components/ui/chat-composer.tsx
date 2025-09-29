@@ -102,7 +102,7 @@ export const ChatComposer = ({
                   target.style.height = `${target.scrollHeight}px`;
                 }}
                 onKeyDown={handleKeyDown}
-                placeholder="Ask anything. Type @ for mentions and / for shortcuts."
+                placeholder="Ask anything."
                 rows={1}
                 style={{
                   minHeight: "24px",

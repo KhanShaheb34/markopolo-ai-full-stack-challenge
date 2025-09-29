@@ -118,6 +118,7 @@ export const LeftRail = ({ onChatSelect, onChatDelete }: LeftRailProps) => {
                 }
                 onMouseLeave={item.hasHover ? handleItemMouseLeave : undefined}
                 tabIndex={0}
+                title={item.label}
                 type="button"
               >
                 <Icon
@@ -125,15 +126,6 @@ export const LeftRail = ({ onChatSelect, onChatDelete }: LeftRailProps) => {
                     item.isLogo ? "animate-pulse" : ""
                   }`}
                 />
-
-                {/* Tooltip - only show when hover rail is not visible */}
-                {!activeHoverType && (
-                  <div className="absolute left-full z-10 ml-2 hidden group-hover:block">
-                    <div className="rounded-md border border-border bg-popover px-2 py-1 text-popover-foreground text-sm shadow-md">
-                      {item.label}
-                    </div>
-                  </div>
-                )}
               </button>
             );
           })}
