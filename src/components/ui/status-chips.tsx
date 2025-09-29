@@ -123,7 +123,7 @@ export const StatusChips = ({
               {/* Chip */}
               <output
                 aria-label={`${stage.label} stage - ${status}`}
-                className={`group relative rounded-lg border px-3 py-2 text-center transition-all duration-300 ${getChipClassName(status)}`}
+                className={`group relative flex flex-col rounded-lg border px-3 py-2 text-center transition-all duration-300 ${getChipClassName(status)}`}
               >
                 {/* Stage Icon */}
                 <div className="mb-1 flex justify-center">
@@ -131,17 +131,7 @@ export const StatusChips = ({
                 </div>
 
                 {/* Stage Label */}
-                <div className="font-medium text-xs">{stage.label}</div>
-
-                {/* Tooltip on hover */}
-                <div className="-translate-x-1/2 absolute bottom-full left-1/2 z-10 mb-2 hidden group-hover:block">
-                  <div className="max-w-xs rounded-md border border-border bg-popover px-3 py-2 text-center text-popover-foreground text-xs shadow-md">
-                    <div className="font-medium">{stage.label}</div>
-                    <div className="mt-1 text-muted-foreground">
-                      {stage.description}
-                    </div>
-                  </div>
-                </div>
+                <div className="flex-1 font-medium text-xs">{stage.label}</div>
               </output>
 
               {/* Progress Line */}

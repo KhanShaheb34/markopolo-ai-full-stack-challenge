@@ -264,11 +264,8 @@ export const useStreaming = () => {
       setState((prev) => ({ ...prev, isStreaming: true, error: null }));
       abortControllerRef.current = new AbortController();
 
-      toast.loading("Starting campaign planning...", { id: "planning-start" });
-
       // Check network connectivity
       if (!navigator.onLine) {
-        toast.dismiss("planning-start");
         toast.error("No internet connection. Please check your network.");
         setState((prev) => ({ ...prev, isStreaming: false }));
         return;
