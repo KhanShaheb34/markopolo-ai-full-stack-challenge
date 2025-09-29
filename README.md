@@ -83,7 +83,8 @@ All connections are **mocked** with realistic fixture data:
 - **Theme**: next-themes (system/dark/light)
 - **Validation**: Zod schemas
 - **Notifications**: Sonner toast library
-- **Linting**: Biome (faster than ESLint)
+- **Linting**: Biome (faster than ESLint), Ultracite
+- **Deploy**: Vercel
 
 ## 🏗️ Architecture
 
@@ -245,7 +246,7 @@ const metaPayload = {
 
 ## 🚀 Deployment
 
-This app is deployed on vercel.
+This app is deployed on Vercel: [https://markopolo-ai-challenge.vercel.app](https://markopolo-ai-challenge.vercel.app)
 
 ## 🧑‍💻 Development
 
