@@ -1,16 +1,33 @@
 "use client";
 
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { ChatComposer } from "@/components/ui/chat-composer";
 import { LeftRail } from "@/components/ui/left-rail";
 import { Message } from "@/components/ui/message";
 import { useStreaming } from "@/hooks/use-streaming";
 import type { CampaignPlan } from "@/lib/schema/plan";
-import { selectedChannelsAtom, selectedSourcesAtom } from "@/lib/store/atoms";
+import {
+  addChatSessionAtom,
+  chatSessionsAtom,
+  currentChatIdAtom,
+  deleteChatSessionAtom,
+  restoreChatStateAtom,
+  selectedChannelsAtom,
+  selectedSourcesAtom,
+  updateChatSessionAtom,
+} from "@/lib/store/atoms";
+import {
+  createChatSession,
+  generateChatId,
+  type StoredChatMessage,
+} from "@/lib/store/chat-storage";
 
 // Constants
 const SCROLL_DELAY_MS = 100;
+const SAVE_DELAY_MS = 100;
+const COMPLETION_SAVE_DELAY_MS = 500;
 
 type ChatMessage = {
   id: string;
@@ -29,6 +46,12 @@ export default function Home() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const selectedSources = useAtomValue(selectedSourcesAtom);
   const selectedChannels = useAtomValue(selectedChannelsAtom);
+  const [currentChatId, setCurrentChatId] = useAtom(currentChatIdAtom);
+  const _chatSessions = useAtomValue(chatSessionsAtom);
+  const _addChatSession = useSetAtom(addChatSessionAtom);
+  const _updateChatSession = useSetAtom(updateChatSessionAtom);
+  const _deleteChatSession = useSetAtom(deleteChatSessionAtom);
+  const _restoreChatState = useSetAtom(restoreChatStateAtom);
 
   const {
     isStreaming,
@@ -89,6 +112,45 @@ export default function Home() {
       : getCompletedMessageProps(message);
   };
 
+  // Save chat to localStorage when streaming completes
+  const saveChatToStorage = useCallback(() => {
+    if (currentChatId && messages.length > 0) {
+      const storedMessages: StoredChatMessage[] = messages.map((msg) => ({
+        id: msg.id,
+        type: msg.type,
+        content: msg.content,
+        timestamp: msg.timestamp,
+        finalPlan: msg.finalPlan,
+        error: msg.error,
+        isCompleted: msg.isCompleted,
+      }));
+
+      const session = createChatSession(
+        currentChatId,
+        storedMessages,
+        selectedSources,
+        selectedChannels
+      );
+
+      const sessions = _chatSessions;
+      const existingIndex = sessions.findIndex((s) => s.id === currentChatId);
+
+      if (existingIndex >= 0) {
+        _updateChatSession(session);
+      } else {
+        _addChatSession(session);
+      }
+    }
+  }, [
+    currentChatId,
+    messages,
+    selectedSources,
+    selectedChannels,
+    _chatSessions,
+    _updateChatSession,
+    _addChatSession,
+  ]);
+
   // Update the active message when streaming completes
   useEffect(() => {
     if (activeMessageId && (finalPlan || error) && !isStreaming) {
@@ -100,10 +162,19 @@ export default function Home() {
         )
       );
       setActiveMessageId(null);
+
+      // Save chat after completion
+      setTimeout(saveChatToStorage, COMPLETION_SAVE_DELAY_MS);
     }
-  }, [activeMessageId, finalPlan, error, isStreaming]);
+  }, [activeMessageId, finalPlan, error, isStreaming, saveChatToStorage]);
 
   const handleSendMessage = async (message: string) => {
+    // Create new chat if this is the first message or no active chat
+    if (!currentChatId) {
+      const newChatId = generateChatId();
+      setCurrentChatId(newChatId);
+    }
+
     // Reset streaming state for new message
     resetState();
 
@@ -126,6 +197,11 @@ export default function Home() {
     setMessages((prev) => [...prev, userMessage, assistantMessage]);
     setActiveMessageId(assistantId);
 
+    // Save the initial messages (user message + empty assistant message)
+    setTimeout(() => {
+      saveChatToStorage();
+    }, SAVE_DELAY_MS);
+
     // Scroll to bottom immediately after adding messages
     setTimeout(scrollToBottom, SCROLL_DELAY_MS);
 
@@ -133,9 +209,83 @@ export default function Home() {
     await startStreaming(message, selectedSources, selectedChannels);
   };
 
+  // Chat management handlers
+  const handleChatSelect = useCallback(
+    (chatId: string) => {
+      // Save current chat before switching
+      saveChatToStorage();
+
+      const session = _chatSessions.find((s) => s.id === chatId);
+      if (!session) {
+        toast.error("Chat not found");
+        return;
+      }
+
+      // Restore chat state
+      _restoreChatState(session);
+
+      // Convert stored messages back to ChatMessage format
+      const chatMessages: ChatMessage[] = session.messages.map((msg) => ({
+        id: msg.id,
+        type: msg.type,
+        content: msg.content,
+        timestamp: msg.timestamp,
+        finalPlan: msg.finalPlan,
+        error: msg.error,
+        isCompleted: msg.isCompleted,
+      }));
+
+      setMessages(chatMessages);
+      setActiveMessageId(null);
+      resetState();
+
+      // Scroll to bottom after messages load
+      setTimeout(scrollToBottom, SCROLL_DELAY_MS);
+    },
+    [
+      saveChatToStorage,
+      _chatSessions,
+      _restoreChatState,
+      resetState,
+      scrollToBottom,
+    ]
+  );
+
+  const handleChatDelete = useCallback(
+    (chatId: string) => {
+      const session = _chatSessions.find((s) => s.id === chatId);
+      if (!session) {
+        return;
+      }
+
+      _deleteChatSession(chatId);
+
+      // If deleting current chat, start a new one
+      if (currentChatId === chatId) {
+        setMessages([]);
+        setActiveMessageId(null);
+        setCurrentChatId(null);
+        resetState();
+      }
+
+      toast.success(`Deleted chat: ${session.title}`);
+    },
+    [
+      _chatSessions,
+      _deleteChatSession,
+      currentChatId,
+      setCurrentChatId,
+      resetState,
+    ]
+  );
+
   const handleNewChat = () => {
+    // Save current chat before starting new one
+    saveChatToStorage();
+
     setMessages([]);
     setActiveMessageId(null);
+    setCurrentChatId(null);
     resetState();
   };
 
@@ -143,7 +293,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      <LeftRail />
+      <LeftRail
+        onChatDelete={handleChatDelete}
+        onChatSelect={handleChatSelect}
+      />
 
       {/* Main content area - offset by left rail */}
       <main className="ml-16 min-h-screen">

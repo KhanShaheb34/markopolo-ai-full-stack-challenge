@@ -2,6 +2,7 @@
 
 import { useAtomValue, useSetAtom } from "jotai";
 import {
+  Clock,
   Facebook,
   Globe,
   Mail,
@@ -12,14 +13,17 @@ import {
   Smartphone,
   Star,
   Target,
+  Trash2,
   X,
 } from "lucide-react";
 import {
+  chatSessionsAtom,
   selectedChannelsAtom,
   selectedSourcesAtom,
   toggleChannelAtom,
   toggleSourceAtom,
 } from "@/lib/store/atoms";
+import { formatRelativeTime } from "@/lib/store/chat-storage";
 
 // Data Sources from spec
 const dataSources = [
@@ -28,7 +32,6 @@ const dataSources = [
     name: "Website Pixel",
     description: "GTM/FB Pixel/Google Ads Tag",
     icon: Globe,
-    connected: true,
     lastSync: "2 hours ago",
     recordCount: 1247,
   },
@@ -37,7 +40,6 @@ const dataSources = [
     name: "Shopify",
     description: "Orders & Customer Data",
     icon: ShoppingBag,
-    connected: true,
     lastSync: "5 minutes ago",
     recordCount: 892,
   },
@@ -46,7 +48,6 @@ const dataSources = [
     name: "Facebook Page",
     description: "Posts & Engagement",
     icon: Facebook,
-    connected: false,
     lastSync: "Never",
     recordCount: 0,
   },
@@ -55,7 +56,6 @@ const dataSources = [
     name: "Review Sites",
     description: "Ratings & Feedback",
     icon: Star,
-    connected: false,
     lastSync: "Never",
     recordCount: 0,
   },
@@ -64,7 +64,6 @@ const dataSources = [
     name: "Twitter/X Page",
     description: "Followers & Engagement",
     icon: X,
-    connected: true,
     lastSync: "1 hour ago",
     recordCount: 456,
   },
@@ -119,15 +118,59 @@ const channels = [
 // Requirements from spec
 const MIN_DATA_SOURCES = 3;
 const MIN_CHANNELS = 4;
+const TOTAL_DATA_SOURCES = 5;
+const TOTAL_CHANNELS = 7;
 
 type HoverRailProps = {
   isVisible: boolean;
-  activeSection: "sources" | "channels" | null;
+  activeSection: "sources" | "channels" | "history" | null;
+  onChatSelect?: (chatId: string) => void;
+  onChatDelete?: (chatId: string) => void;
 };
 
-export const HoverRail = ({ isVisible, activeSection }: HoverRailProps) => {
+// Helper functions to reduce complexity
+const getHeaderTitle = (
+  activeSection: "sources" | "channels" | "history" | null
+): string => {
+  switch (activeSection) {
+    case "sources":
+      return "Data Sources";
+    case "channels":
+      return "Channels";
+    case "history":
+      return "Chat History";
+    default:
+      return "";
+  }
+};
+
+const getHeaderDescription = (
+  activeSection: "sources" | "channels" | "history" | null,
+  sourcesCount: number,
+  channelsCount: number,
+  chatsCount: number
+): string => {
+  switch (activeSection) {
+    case "sources":
+      return `Select 3+ sources to continue (${sourcesCount}/${TOTAL_DATA_SOURCES} selected)`;
+    case "channels":
+      return `Select 4+ channels to continue (${channelsCount}/${TOTAL_CHANNELS} selected)`;
+    case "history":
+      return `${chatsCount} saved conversations`;
+    default:
+      return "";
+  }
+};
+
+export const HoverRail = ({
+  isVisible,
+  activeSection,
+  onChatSelect,
+  onChatDelete,
+}: HoverRailProps) => {
   const selectedSources = useAtomValue(selectedSourcesAtom);
   const selectedChannels = useAtomValue(selectedChannelsAtom);
+  const chatSessions = useAtomValue(chatSessionsAtom);
   const toggleSource = useSetAtom(toggleSourceAtom);
   const toggleChannel = useSetAtom(toggleChannelAtom);
   return (
@@ -140,12 +183,15 @@ export const HoverRail = ({ isVisible, activeSection }: HoverRailProps) => {
         {/* Header */}
         <div className="border-border border-b p-4">
           <h2 className="font-semibold text-foreground text-lg">
-            {activeSection === "sources" ? "Data Sources" : "Channels"}
+            {getHeaderTitle(activeSection)}
           </h2>
           <p className="text-muted-foreground text-sm">
-            {activeSection === "sources"
-              ? `Select 3+ sources to continue (${selectedSources.length}/5 selected)`
-              : `Select 4+ channels to continue (${selectedChannels.length}/7 selected)`}
+            {getHeaderDescription(
+              activeSection,
+              selectedSources.length,
+              selectedChannels.length,
+              chatSessions.length
+            )}
           </p>
         </div>
 
@@ -157,7 +203,6 @@ export const HoverRail = ({ isVisible, activeSection }: HoverRailProps) => {
               {dataSources.map((source) => {
                 const Icon = source.icon;
                 const isSelected = selectedSources.includes(source.id);
-                const isConnected = source.connected;
 
                 return (
                   <button
@@ -173,11 +218,9 @@ export const HoverRail = ({ isVisible, activeSection }: HoverRailProps) => {
                   >
                     <div className="flex items-start gap-3">
                       <div
-                        className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                          isConnected
-                            ? "bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400"
-                            : "bg-muted text-muted-foreground"
-                        }`}
+                        className={
+                          "flex h-10 w-10 items-center justify-center rounded-lg"
+                        }
                       >
                         <Icon className="h-5 w-5" />
                       </div>
@@ -186,27 +229,18 @@ export const HoverRail = ({ isVisible, activeSection }: HoverRailProps) => {
                           <h4 className="font-medium text-foreground text-sm">
                             {source.name}
                           </h4>
-                          <span
-                            className={`rounded-full px-2 py-1 text-xs ${
-                              isConnected
-                                ? "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-300"
-                                : "bg-muted text-muted-foreground"
-                            }`}
-                          >
-                            {isConnected ? "Connected" : "Not Connected"}
-                          </span>
                         </div>
                         <p className="text-muted-foreground text-xs">
                           {source.description}
                         </p>
-                        {isConnected && (
-                          <div className="mt-1 flex gap-4 text-muted-foreground text-xs">
-                            <span>Last sync: {source.lastSync}</span>
-                            <span>
-                              {source.recordCount.toLocaleString()} records
-                            </span>
-                          </div>
-                        )}
+                        <div className="mt-1 flex justify-between gap-4 text-muted-foreground text-xs">
+                          <span className="flex items-center gap-1">
+                            <Clock size={12} /> {source.lastSync}
+                          </span>
+                          <span>
+                            {source.recordCount.toLocaleString()} records
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </button>
@@ -251,6 +285,64 @@ export const HoverRail = ({ isVisible, activeSection }: HoverRailProps) => {
               })}
             </div>
           )}
+
+          {/* Chat History Section */}
+          {activeSection === "history" && (
+            <div className="space-y-2 p-4">
+              {chatSessions.length === 0 ? (
+                <div className="rounded-lg border border-border border-dashed p-8 text-center">
+                  <Clock className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
+                  <p className="text-muted-foreground text-sm">
+                    No chat history yet
+                  </p>
+                  <p className="mt-1 text-muted-foreground text-xs">
+                    Start a conversation to see it here
+                  </p>
+                </div>
+              ) : (
+                chatSessions.map((session) => (
+                  <div
+                    className="group rounded-lg border border-border bg-card p-3 transition-all hover:bg-accent hover:shadow-md"
+                    key={session.id}
+                  >
+                    <div className="flex items-start justify-between">
+                      <button
+                        aria-label={`Open chat: ${session.title}`}
+                        className="min-w-0 flex-1 text-left"
+                        onClick={() => onChatSelect?.(session.id)}
+                        type="button"
+                      >
+                        <h4 className="line-clamp-2 font-medium text-foreground text-sm">
+                          {session.title}
+                        </h4>
+                        <div className="mt-1 flex items-center gap-2 text-muted-foreground text-xs">
+                          <Clock className="h-3 w-3" />
+                          {formatRelativeTime(session.updatedAt)}
+                        </div>
+                        <div className="mt-1 text-muted-foreground text-xs">
+                          {session.messages.length} messages •{" "}
+                          {session.selectedSources.length} sources •{" "}
+                          {session.selectedChannels.length} channels
+                        </div>
+                      </button>
+
+                      <button
+                        aria-label={`Delete chat: ${session.title}`}
+                        className="rounded p-1 text-muted-foreground opacity-0 transition-all hover:bg-destructive hover:text-destructive-foreground group-hover:opacity-100"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onChatDelete?.(session.id);
+                        }}
+                        type="button"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
         </div>
 
         {/* Footer Summary */}
@@ -279,6 +371,11 @@ export const HoverRail = ({ isVisible, activeSection }: HoverRailProps) => {
                   more channels
                 </div>
               </>
+            )}
+            {activeSection === "history" && (
+              <div className="text-muted-foreground text-sm">
+                Total: {chatSessions.length} conversations
+              </div>
             )}
           </div>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Database, Disc, Home, Send } from "lucide-react";
+import { Database, Disc, MessageSquare, Send } from "lucide-react";
 import { useEffect, useState } from "react";
 import { HoverRail } from "./hover-rail";
 import { ThemeSwitcher } from "./theme-switcher";
@@ -14,11 +14,12 @@ const railItems = [
     hasHover: false,
   },
   {
-    id: "home",
-    icon: Home,
-    label: "Home",
+    id: "history",
+    icon: MessageSquare,
+    label: "Chat History",
     isLogo: false,
-    hasHover: false,
+    hasHover: true,
+    hoverType: "history" as const,
   },
   {
     id: "sources",
@@ -38,12 +39,17 @@ const railItems = [
   },
 ] as const;
 
-type HoverType = "sources" | "channels" | null;
+type HoverType = "sources" | "channels" | "history" | null;
 
 // Delay before hiding hover rail to allow smooth mouse movement
 const HOVER_HIDE_DELAY = 200;
 
-export const LeftRail = () => {
+type LeftRailProps = {
+  onChatSelect?: (chatId: string) => void;
+  onChatDelete?: (chatId: string) => void;
+};
+
+export const LeftRail = ({ onChatSelect, onChatDelete }: LeftRailProps) => {
   const [activeHoverType, setActiveHoverType] = useState<HoverType>(null);
   const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
 
@@ -160,6 +166,8 @@ export const LeftRail = () => {
         <HoverRail
           activeSection={activeHoverType}
           isVisible={activeHoverType !== null}
+          onChatDelete={onChatDelete}
+          onChatSelect={onChatSelect}
         />
       </aside>
     </>
