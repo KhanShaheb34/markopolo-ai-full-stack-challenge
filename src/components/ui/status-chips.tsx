@@ -113,7 +113,7 @@ export const StatusChips = ({
       </div>
 
       {/* Status Chips */}
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid w-full grid-cols-5 gap-2">
         {STAGES.map((stage, index) => {
           const status = getStageStatus(stage.id);
           const isLast = index === STAGES.length - 1;

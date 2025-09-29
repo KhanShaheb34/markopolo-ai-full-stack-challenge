@@ -69,7 +69,9 @@ export const JsonViewer = ({
   };
 
   return (
-    <div className={`rounded-lg border border-border bg-card ${className}`}>
+    <div
+      className={`w-full rounded-lg border border-border bg-card ${className}`}
+    >
       {/* Header */}
       <div className="border-border border-b bg-muted/30 px-4 py-3">
         <div className="flex items-center justify-between">

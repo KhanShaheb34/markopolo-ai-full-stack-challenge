@@ -64,9 +64,9 @@ export const Message = ({
         {/* Assistant Message */}
         {type === "assistant" && (
           <div className="space-y-4">
-            {/* Status Chips - show when streaming, has completed stages, or message is completed */}
+            {/* Status Chips - show when streaming, has completed stages, or message is completed - FULL WIDTH */}
             {(isStreaming || completedStages.length > 0 || finalPlan) && (
-              <div className="rounded-lg border border-border bg-card/50 p-4">
+              <div className="w-full rounded-lg border border-border bg-card/50 p-4">
                 <StatusChips
                   completedStages={
                     finalPlan
