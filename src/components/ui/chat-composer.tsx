@@ -157,15 +157,6 @@ export const ChatComposer = ({
                 >
                   <ArrowUp className="h-4 w-4" />
                 </button>
-
-                {/* Tooltip for disabled state */}
-                {isDisabled && getDisabledReason() && (
-                  <div className="absolute right-0 bottom-full z-10 mb-2 hidden group-hover/send:block">
-                    <div className="max-w-xs rounded-md border border-border bg-popover px-3 py-2 text-popover-foreground text-sm shadow-md">
-                      {getDisabledReason()}
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -176,6 +167,7 @@ export const ChatComposer = ({
           {hasMinimumRequirements
             ? "Press Enter to send, Shift+Enter for new line"
             : "Configure sources and channels above to start planning"}
+          {isDisabled && ` ・ ${getDisabledReason()}`}
         </div>
       </form>
     </div>
