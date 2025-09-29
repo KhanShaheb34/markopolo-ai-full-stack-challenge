@@ -1,13 +1,16 @@
 "use client";
 
 import { useAtomValue } from "jotai";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ChatComposer } from "@/components/ui/chat-composer";
 import { LeftRail } from "@/components/ui/left-rail";
 import { Message } from "@/components/ui/message";
 import { useStreaming } from "@/hooks/use-streaming";
 import type { CampaignPlan } from "@/lib/schema/plan";
 import { selectedChannelsAtom, selectedSourcesAtom } from "@/lib/store/atoms";
+
+// Constants
+const SCROLL_DELAY_MS = 100;
 
 type ChatMessage = {
   id: string;
@@ -23,6 +26,7 @@ type ChatMessage = {
 export default function Home() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [activeMessageId, setActiveMessageId] = useState<string | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const selectedSources = useAtomValue(selectedSourcesAtom);
   const selectedChannels = useAtomValue(selectedChannelsAtom);
 
@@ -36,6 +40,24 @@ export default function Home() {
     startStreaming,
     resetState,
   } = useStreaming();
+
+  // Auto-scroll to bottom when messages change or streaming updates
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      scrollToBottom();
+    }
+  }, [messages.length, scrollToBottom]);
+
+  // Also scroll when streaming completes
+  useEffect(() => {
+    if (finalPlan) {
+      scrollToBottom();
+    }
+  }, [finalPlan, scrollToBottom]);
 
   // Helper functions to get message props
   const getActiveMessageProps = (message: ChatMessage) => ({
@@ -104,6 +126,9 @@ export default function Home() {
     setMessages((prev) => [...prev, userMessage, assistantMessage]);
     setActiveMessageId(assistantId);
 
+    // Scroll to bottom immediately after adding messages
+    setTimeout(scrollToBottom, SCROLL_DELAY_MS);
+
     // Start streaming campaign plan generation
     await startStreaming(message, selectedSources, selectedChannels);
   };
@@ -160,6 +185,8 @@ export default function Home() {
                     {...getMessageProps(message)}
                   />
                 ))}
+                {/* Invisible div for auto-scrolling */}
+                <div ref={messagesEndRef} />
               </div>
             </div>
 
