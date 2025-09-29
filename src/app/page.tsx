@@ -1,11 +1,12 @@
 "use client";
 
 import { useAtomValue } from "jotai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChatComposer } from "@/components/ui/chat-composer";
 import { LeftRail } from "@/components/ui/left-rail";
 import { Message } from "@/components/ui/message";
 import { useStreaming } from "@/hooks/use-streaming";
+import type { CampaignPlan } from "@/lib/schema/plan";
 import { selectedChannelsAtom, selectedSourcesAtom } from "@/lib/store/atoms";
 
 type ChatMessage = {
@@ -13,10 +14,15 @@ type ChatMessage = {
   type: "user" | "assistant";
   content?: string;
   timestamp: Date;
+  // Store final results with each assistant message
+  finalPlan?: CampaignPlan | null;
+  error?: string | null;
+  isCompleted?: boolean;
 };
 
 export default function Home() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [activeMessageId, setActiveMessageId] = useState<string | null>(null);
   const selectedSources = useAtomValue(selectedSourcesAtom);
   const selectedChannels = useAtomValue(selectedChannelsAtom);
 
@@ -31,7 +37,54 @@ export default function Home() {
     resetState,
   } = useStreaming();
 
+  // Helper functions to get message props
+  const getActiveMessageProps = (message: ChatMessage) => ({
+    isStreaming,
+    currentStage,
+    completedStages,
+    partialPlan,
+    finalPlan: finalPlan || message.finalPlan,
+    error: error || message.error,
+  });
+
+  const getCompletedMessageProps = (message: ChatMessage) => ({
+    isStreaming: false,
+    currentStage: null,
+    completedStages: [],
+    partialPlan: null,
+    finalPlan: message.finalPlan,
+    error: message.error,
+  });
+
+  const getMessageProps = (message: ChatMessage) => {
+    if (message.type !== "assistant") {
+      return {};
+    }
+
+    const isActiveMessage = message.id === activeMessageId;
+    return isActiveMessage
+      ? getActiveMessageProps(message)
+      : getCompletedMessageProps(message);
+  };
+
+  // Update the active message when streaming completes
+  useEffect(() => {
+    if (activeMessageId && (finalPlan || error) && !isStreaming) {
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === activeMessageId
+            ? { ...msg, finalPlan, error, isCompleted: true }
+            : msg
+        )
+      );
+      setActiveMessageId(null);
+    }
+  }, [activeMessageId, finalPlan, error, isStreaming]);
+
   const handleSendMessage = async (message: string) => {
+    // Reset streaming state for new message
+    resetState();
+
     // Add user message to chat
     const userMessage: ChatMessage = {
       id: `user-${Date.now()}`,
@@ -40,13 +93,16 @@ export default function Home() {
       timestamp: new Date(),
     };
 
+    const assistantId = `assistant-${Date.now()}`;
     const assistantMessage: ChatMessage = {
-      id: `assistant-${Date.now()}`,
+      id: assistantId,
       type: "assistant",
       timestamp: new Date(),
+      isCompleted: false,
     };
 
     setMessages((prev) => [...prev, userMessage, assistantMessage]);
+    setActiveMessageId(assistantId);
 
     // Start streaming campaign plan generation
     await startStreaming(message, selectedSources, selectedChannels);
@@ -54,6 +110,7 @@ export default function Home() {
 
   const handleNewChat = () => {
     setMessages([]);
+    setActiveMessageId(null);
     resetState();
   };
 
@@ -94,29 +151,15 @@ export default function Home() {
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-6">
               <div className="mx-auto max-w-4xl space-y-6">
-                {messages.map((message, index) => {
-                  const isLastAssistant =
-                    message.type === "assistant" &&
-                    index === messages.length - 1;
-
-                  return (
-                    <Message
-                      content={message.content}
-                      key={message.id}
-                      timestamp={message.timestamp}
-                      type={message.type}
-                      // Pass streaming state only to the last assistant message
-                      {...(isLastAssistant && {
-                        isStreaming,
-                        currentStage,
-                        completedStages,
-                        partialPlan,
-                        finalPlan,
-                        error,
-                      })}
-                    />
-                  );
-                })}
+                {messages.map((message) => (
+                  <Message
+                    content={message.content}
+                    key={message.id}
+                    timestamp={message.timestamp}
+                    type={message.type}
+                    {...getMessageProps(message)}
+                  />
+                ))}
               </div>
             </div>
 

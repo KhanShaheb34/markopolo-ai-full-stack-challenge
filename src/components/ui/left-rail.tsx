@@ -3,6 +3,7 @@
 import { Database, Disc, Home, Send } from "lucide-react";
 import { useEffect, useState } from "react";
 import { HoverRail } from "./hover-rail";
+import { ThemeSwitcher } from "./theme-switcher";
 
 const railItems = [
   {
@@ -96,7 +97,7 @@ export const LeftRail = () => {
   return (
     <>
       <nav className="fixed top-0 left-0 z-50 flex h-full w-16 flex-col border-border border-r bg-background/80 backdrop-blur-md">
-        <div className="flex flex-col gap-2 p-2">
+        <div className="flex flex-1 flex-col gap-2 p-2">
           {railItems.map((item) => {
             const Icon = item.icon;
 
@@ -130,6 +131,11 @@ export const LeftRail = () => {
               </button>
             );
           })}
+        </div>
+
+        {/* Theme Switcher at bottom */}
+        <div className="p-2">
+          <ThemeSwitcher />
         </div>
       </nav>
 
