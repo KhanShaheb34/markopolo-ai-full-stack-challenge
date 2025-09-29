@@ -1,5 +1,6 @@
 "use client";
 
+import { useAtomValue, useSetAtom } from "jotai";
 import {
   Facebook,
   Globe,
@@ -11,9 +12,14 @@ import {
   Smartphone,
   Star,
   Target,
-  Twitter,
+  X,
 } from "lucide-react";
-import { useState } from "react";
+import {
+  selectedChannelsAtom,
+  selectedSourcesAtom,
+  toggleChannelAtom,
+  toggleSourceAtom,
+} from "@/lib/store/atoms";
 
 // Data Sources from spec
 const dataSources = [
@@ -57,7 +63,7 @@ const dataSources = [
     id: "twitter",
     name: "Twitter/X Page",
     description: "Followers & Engagement",
-    icon: Twitter,
+    icon: X,
     connected: true,
     lastSync: "1 hour ago",
     recordCount: 456,
@@ -120,30 +126,10 @@ type HoverRailProps = {
 };
 
 export const HoverRail = ({ isVisible, activeSection }: HoverRailProps) => {
-  const [selectedSources, setSelectedSources] = useState<string[]>(
-    dataSources.filter((source) => source.connected).map((source) => source.id)
-  );
-
-  const [selectedChannels, setSelectedChannels] = useState<string[]>(
-    channels.filter((channel) => channel.selected).map((channel) => channel.id)
-  );
-
-  const handleSourceToggle = (sourceId: string) => {
-    setSelectedSources((prev) =>
-      prev.includes(sourceId)
-        ? prev.filter((id) => id !== sourceId)
-        : [...prev, sourceId]
-    );
-  };
-
-  const handleChannelToggle = (channelId: string) => {
-    setSelectedChannels((prev) =>
-      prev.includes(channelId)
-        ? prev.filter((id) => id !== channelId)
-        : [...prev, channelId]
-    );
-  };
-
+  const selectedSources = useAtomValue(selectedSourcesAtom);
+  const selectedChannels = useAtomValue(selectedChannelsAtom);
+  const toggleSource = useSetAtom(toggleSourceAtom);
+  const toggleChannel = useSetAtom(toggleChannelAtom);
   return (
     <div
       className={`fixed top-0 left-16 z-40 h-full w-80 transform border-border border-r bg-background/95 backdrop-blur-md transition-transform duration-300 ease-in-out ${
@@ -182,7 +168,7 @@ export const HoverRail = ({ isVisible, activeSection }: HoverRailProps) => {
                         : "border-border bg-card hover:bg-accent"
                     }`}
                     key={source.id}
-                    onClick={() => handleSourceToggle(source.id)}
+                    onClick={() => toggleSource(source.id)}
                     type="button"
                   >
                     <div className="flex items-start gap-3">
@@ -245,7 +231,7 @@ export const HoverRail = ({ isVisible, activeSection }: HoverRailProps) => {
                         : "border-border bg-card hover:bg-accent"
                     }`}
                     key={channel.id}
-                    onClick={() => handleChannelToggle(channel.id)}
+                    onClick={() => toggleChannel(channel.id)}
                     type="button"
                   >
                     <div

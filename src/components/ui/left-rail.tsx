@@ -136,6 +136,7 @@ export const LeftRail = () => {
       {/* Bridge area to prevent hover loss when moving to hover rail */}
       {activeHoverType && (
         <div
+          aria-hidden
           className="fixed top-0 left-16 z-30 h-full w-4"
           onMouseEnter={handleHoverRailMouseEnter}
           onMouseLeave={handleHoverRailMouseLeave}
@@ -145,8 +146,10 @@ export const LeftRail = () => {
 
       {/* Hover Rail */}
       <aside
+        aria-hidden
         onMouseEnter={handleHoverRailMouseEnter}
         onMouseLeave={handleHoverRailMouseLeave}
+        role="presentation"
       >
         <HoverRail
           activeSection={activeHoverType}
